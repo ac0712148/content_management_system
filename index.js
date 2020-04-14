@@ -39,92 +39,92 @@ function start() {
       switch (answer.action) {
         case "Search by Song":
           return querySong();
-        case "Search by Artist":
-          return queryArtist();
-        case "Search by Year Range":
-          return searchYearRange();
+        // case "Search by Artist":
+        //   return queryArtist();
+        // case "Search by Year Range":
+        //   return searchYearRange();
         case "Exit":
           connection.end();
       }
     });
 }
-function queryArtist() {
-  inquirer
-    .prompt([
-      {
-        name: "artist",
-        message: "What artist do you want to search?"
-      }
-    ])
-    .then(answer => {
-      connection.query(
-        "SELECT * FROM top5000 WHERE ?",
-        { artist: answer.artist },
-        (err, res) => {
-          if (err) {
-            throw err;
-          }
-          // Log all results of the SELECT statement
-          if (res.length > 0) {
-            console.table(res);
-          } else {
-            console.log("No search results.");
-          }
-          start();
-        }
-      );
-    });
-}
-function querySong() {
-  inquirer
-    .prompt([
-      {
-        name: "song",
-        message: "What song do you want to search?"
-      }
-    ])
-    .then(answer => {
-      connection.query(
-        `SELECT * FROM top5000 WHERE song='${answer.song}'`,
-        (err, res) => {
-          if (err) {
-            throw err;
-          }
-          if (res.length > 0) {
-            console.table(res);
-          } else {
-            console.log("No search results.");
-          }
-          start();
-        }
-      );
-    });
-}
-function searchYearRange() {
-  inquirer
-    .prompt([
-      {
-        name: "startYear",
-        message: "What year do you want to start with?"
-      },
-      {
-        name: "endYear",
-        message: "What year do you want to end with?"
-      }
-    ])
-    .then(answers => {
-      connection.query(
-        `SELECT * FROM top5000 
-        WHERE year
-        BETWEEN ${answers.startYear} AND ${answers.endYear}`,
-        (err, res) => {
-          if (err) {
-            throw err;
-          }
-          // Log all results of the SELECT statement
-          console.table(res);
-          start();
-        }
-      );
-    });
-}
+// function queryArtist() {
+//   inquirer
+//     .prompt([
+//       {
+//         name: "artist",
+//         message: "What artist do you want to search?"
+//       }
+//     ])
+//     .then(answer => {
+//       connection.query(
+//         "SELECT * FROM top5000 WHERE ?",
+//         { artist: answer.artist },
+//         (err, res) => {
+//           if (err) {
+//             throw err;
+//           }
+//           // Log all results of the SELECT statement
+//           if (res.length > 0) {
+//             console.table(res);
+//           } else {
+//             console.log("No search results.");
+//           }
+//           start();
+//         }
+//       );
+//     });
+// }
+// function querySong() {
+//   inquirer
+//     .prompt([
+//       {
+//         name: "song",
+//         message: "What song do you want to search?"
+//       }
+//     ])
+//     .then(answer => {
+//       connection.query(
+//         `SELECT * FROM top5000 WHERE song='${answer.song}'`,
+//         (err, res) => {
+//           if (err) {
+//             throw err;
+//           }
+//           if (res.length > 0) {
+//             console.table(res);
+//           } else {
+//             console.log("No search results.");
+//           }
+//           start();
+//         }
+//       );
+//     });
+// }
+// function searchYearRange() {
+//   inquirer
+//     .prompt([
+//       {
+//         name: "startYear",
+//         message: "What year do you want to start with?"
+//       },
+//       {
+//         name: "endYear",
+//         message: "What year do you want to end with?"
+//       }
+//     ])
+//     .then(answers => {
+//       connection.query(
+//         `SELECT * FROM top5000 
+//         WHERE year
+//         BETWEEN ${answers.startYear} AND ${answers.endYear}`,
+//         (err, res) => {
+//           if (err) {
+//             throw err;
+//           }
+//           // Log all results of the SELECT statement
+//           console.table(res);
+//           start();
+//         }
+//       );
+//     });
+// }
