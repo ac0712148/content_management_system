@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/ac0712148/content_management_system_employee_tracker#readme",
   "dependencies": {
-    "inquirer": "^7.1.0"
+    "console.table": "^0.10.0",
+    "inquirer": "^7.1.0",
+    "mysql": "^2.18.1"
   }
 }
