@@ -10,9 +10,8 @@ USE tracker_db;
 -- * "id" that is a INT PRIMARY KEY
 -- * "name" that is a VARCHAR(30) to hold department name
 CREATE TABLE department (
-    name VARCHAR(30) NOT NULL,
-
     id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(30) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -22,11 +21,10 @@ CREATE TABLE department (
 -- * "salary" that is DECIMAL to hold role salary
 -- * "department_id" that is INT to hold reference to department role belongs to
 CREATE TABLE role (
+    id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR(30) NOT NULL,
     salary DECIMAL(10,2) NOT NULL,
     department_id INT NOT NULL,
-
-    id INT NOT NULL AUTO_INCREMENT,
     PRIMARY KEY (id)
 );
 
@@ -38,11 +36,10 @@ CREATE TABLE role (
 -- "manager_id" that is an INT to hold reference to another employee that is manager 
 --      of the current employee. May be null if the employee has no manager
 CREATE TABLE employee (
+    id INT NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
     role_id INT NOT NULL,
     manager_id INT NULL,
-
-    id INT NOT NULL AUTO_INCREMENT,
     PRIMARY KEY (id)
 );
