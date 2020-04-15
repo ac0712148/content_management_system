@@ -19,7 +19,7 @@ connection.connect(err => {
     // console.log("connected as id " + connection.threadId + "\n");
     start();
 });
-
+// Main menu prompt
 function start() {
     inquirer
         .prompt([{
@@ -49,7 +49,7 @@ function start() {
             }
         });
 }
-
+// Add menu prompt
 function add() {
     inquirer
         .prompt([{
@@ -100,7 +100,7 @@ function add() {
 
         });
 }
-
+// View menu prompt
 function view() {
     inquirer
         .prompt([{
@@ -149,6 +149,7 @@ function view() {
         });
 }
 
+// Helper function for view() to render data
 function readData(search) {
     connection.query(search, (err, res) => {
         if (err) {
@@ -160,6 +161,7 @@ function readData(search) {
     });
 }
 
+// Update menu for role
 function update() {
     inquirer
         .prompt([{
