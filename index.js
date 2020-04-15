@@ -17,7 +17,7 @@ connection.connect(err => {
         throw err;
     }
     console.log("connected as id " + connection.threadId + "\n");
-    //   start();
+    start();
     connection.end();
 });
 function start() {
@@ -26,27 +26,29 @@ function start() {
       {
         name: "action",
         type: "list",
-        message: "What do you want to do next?",
+        message: "What action do you want to perform?",
         choices: [
-          "Search by Song",
-          "Search by Artist",
-          "Search by Year Range",
+          "ADD department, roles, or employees",
+          "VIEW department, roles, or employees",
+          "UPDATE employees",
           "Exit"
         ]
       }
     ])
     .then(answer => {
       switch (answer.action) {
-        case "Search by Song":
-          return querySong();
-        // case "Search by Artist":
-        //   return queryArtist();
+        // case "Search by Song":
+        //   return querySong();
+        case "VIEW department, roles, or employees":
+          return view();
         // case "Search by Year Range":
         //   return searchYearRange();
         case "Exit":
-          connection.end();
+          console.log("Exiting....")
+          // connection.end();
       }
-    });
+    }
+  );
 }
 // function queryArtist() {
 //   inquirer
@@ -75,31 +77,35 @@ function start() {
 //       );
 //     });
 // }
-// function querySong() {
-//   inquirer
-//     .prompt([
-//       {
-//         name: "song",
-//         message: "What song do you want to search?"
-//       }
-//     ])
-//     .then(answer => {
-//       connection.query(
-//         `SELECT * FROM top5000 WHERE song='${answer.song}'`,
-//         (err, res) => {
-//           if (err) {
-//             throw err;
-//           }
-//           if (res.length > 0) {
-//             console.table(res);
-//           } else {
-//             console.log("No search results.");
-//           }
-//           start();
-//         }
-//       );
-//     });
-// }
+function view() {
+  inquirer
+    .prompt([
+      {
+        name: "action",
+        type: "list",
+        message: "What action do you want to perform?",
+        choices: [
+          "View All Employees",
+          "VIEW employees by Role",
+          "VIEW employees by Department",
+          "Exit"
+        ]
+      }
+    ])
+    .then(answer => {
+      switch (answer.action) {
+        case "View All Employees":
+          return console.log("Viewing all employees...");
+        case "VIEW employees by Role":
+          return console.log("Viewing all employees by Role...");;
+        case "VIEW employees by Department":
+          return console.log("Viewing all employees by department...");;
+        case "Exit":
+          console.log("Exiting....")
+          // connection.end();
+      }
+    });
+}
 // function searchYearRange() {
 //   inquirer
 //     .prompt([
