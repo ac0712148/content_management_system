@@ -18,7 +18,6 @@ connection.connect(err => {
     }
     console.log("connected as id " + connection.threadId + "\n");
     start();
-    // connection.end();
 });
 function start() {
   inquirer
@@ -28,7 +27,7 @@ function start() {
         type: "list",
         message: "What action do you want to perform?",
         choices: [
-          "ADD department, roles, or employees",
+          "ADD employee",
           "VIEW department, roles, or employees",
           "UPDATE employees",
           "Exit"
@@ -37,12 +36,12 @@ function start() {
     ])
     .then(answer => {
       switch (answer.action) {
-        // case "Search by Song":
-        //   return querySong();
+        case "ADD employee":
+          return add();
         case "VIEW department, roles, or employees":
           return view();
-        // case "Search by Year Range":
-        //   return searchYearRange();
+        case "UPDATE employees":
+          return update();
         case "Exit": {
           console.log("Exiting....")
           connection.end();
@@ -51,33 +50,59 @@ function start() {
     }
   );
 }
-// function queryArtist() {
-//   inquirer
-//     .prompt([
-//       {
-//         name: "artist",
-//         message: "What artist do you want to search?"
-//       }
-//     ])
-//     .then(answer => {
-//       connection.query(
-//         "SELECT * FROM top5000 WHERE ?",
-//         { artist: answer.artist },
-//         (err, res) => {
-//           if (err) {
-//             throw err;
-//           }
-//           // Log all results of the SELECT statement
-//           if (res.length > 0) {
-//             console.table(res);
-//           } else {
-//             console.log("No search results.");
-//           }
-//           start();
-//         }
-//       );
-//     });
-// }
+function add() {
+  inquirer
+    .prompt([
+      {
+        name: "firstName",
+        message: "What is the employee's first name?"
+      },{
+        name: "lastName",
+        message: "What is the employee's last name?"
+      },{
+        name: "title",
+        type: "list",
+        message: "What is the employee's role title?",
+        choices: [
+          "Regional Manager",
+          "Sales Representative",
+          "Receptionist",
+          "Accountant",
+          "Senior Accountant",
+          "Supply Relations Representative",
+          "Customer Service Representative",
+          "Human Resources Representative",
+          "QA Director"
+        ]
+      },{
+        name: "managerID",
+        message: "What is the employee's manager ID?"
+      }
+    ])
+    .then(answer => {
+  console.log("Inserting a new Employee...\n");
+  connection.query(`SELECT role.title AS Role, role.id AS RoleID, department.dept_name AS Department, department.id
+  FROM role
+  INNER JOIN department ON role.department_id = department.id
+  WHERE role.title = '${answer.title}';`, (err, res) => {
+    if (err) {
+      throw err;
+    }
+    connection.query(
+    `INSERT INTO employee (first_name, last_name, manager_id, role_id)
+    VALUES
+    ("${answer.firstName}", "${answer.lastName}", ${answer.managerID}, ${res[0].id})`,
+    (err, res) => {
+      if (err) {
+        throw err;
+      }
+      start();
+    }
+  );
+  });
+  
+    });
+}
 function view() {
   inquirer
     .prompt([
@@ -124,7 +149,6 @@ function view() {
     });
 }
 function readData(search) {
-  // console.log("Selecting all products...\n");
   connection.query(search, (err, res) => {
     if (err) {
       throw err;
@@ -132,10 +156,9 @@ function readData(search) {
     // Log all results of the SELECT statement
     console.table(res);
     view();
-    // connection.end();
   });
 }
-// function searchYearRange() {
+// function update() {
 //   inquirer
 //     .prompt([
 //       {
