@@ -18,7 +18,7 @@ connection.connect(err => {
     }
     console.log("connected as id " + connection.threadId + "\n");
     start();
-    connection.end();
+    // connection.end();
 });
 function start() {
   inquirer
@@ -43,9 +43,10 @@ function start() {
           return view();
         // case "Search by Year Range":
         //   return searchYearRange();
-        case "Exit":
+        case "Exit": {
           console.log("Exiting....")
-          // connection.end();
+          connection.end();
+        }
       }
     }
   );
@@ -83,7 +84,7 @@ function view() {
       {
         name: "action",
         type: "list",
-        message: "What action do you want to perform?",
+        message: "What VIEW do you want to perform?",
         choices: [
           "View All Employees",
           "VIEW employees by Role",
@@ -94,17 +95,45 @@ function view() {
     ])
     .then(answer => {
       switch (answer.action) {
-        case "View All Employees":
-          return console.log("Viewing all employees...");
-        case "VIEW employees by Role":
-          return console.log("Viewing all employees by Role...");;
-        case "VIEW employees by Department":
-          return console.log("Viewing all employees by department...");;
-        case "Exit":
+        case "View All Employees": {
+          console.log("Viewing all employees...");
+          return readData(`SELECT e.id, e.first_name, e.last_name, r.title, d.dept_name, r.salary, e.manager_id
+          FROM department d, role r, employee e
+          WHERE d.id = r.department_id AND r.id = e.role_id
+          ORDER BY e.id ASC;`);
+        }
+        case "VIEW employees by Role": {
+          console.log("Viewing all employees by Role...");
+          return readData(`SELECT r.title AS role, e.id, e.first_name, e.last_name, d.dept_name, r.salary, e.manager_id
+          FROM department d, role r, employee e
+          WHERE d.id = r.department_id AND r.id = e.role_id
+          ORDER BY r.title ASC;`);
+        }
+        case "VIEW employees by Department":{
+          console.log("Viewing all employees by department...");
+          return readData(`SELECT d.dept_name, e.id, e.first_name, e.last_name, r.title AS role, r.salary, e.manager_id
+          FROM department d, role r, employee e
+          WHERE d.id = r.department_id AND r.id = e.role_id
+          ORDER BY d.dept_name ASC;`);
+        }
+        case "Exit": {
           console.log("Exiting....")
-          // connection.end();
+          connection.end();
+        }
       }
     });
+}
+function readData(search) {
+  // console.log("Selecting all products...\n");
+  connection.query(search, (err, res) => {
+    if (err) {
+      throw err;
+    }
+    // Log all results of the SELECT statement
+    console.table(res);
+    view();
+    // connection.end();
+  });
 }
 // function searchYearRange() {
 //   inquirer
